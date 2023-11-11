@@ -1,0 +1,472 @@
+<head>
+    <meta charset= "UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="author" content="ROCK_PAPER_SCISSORS">  
+<meta name="description" content="ROCK PAPER SCISSORS GUESSING GAME">
+<meta name="viewport" content="width=device-width initial-scale=1.0">
+    
+</head>
+
+<body>
+    
+    
+    <div class="popUp" id="popUp">
+    <p id="popUpText" class='popUpText'></p>
+    <button id="tryAgain" class="tryAgain">🔁</button>
+    </div>
+    
+    
+<div class="container1">
+    
+<div class="nav_bar">
+    
+    <button class="menu">menu</button>
+
+    <div  id="sideTab">
+    <ul>
+    <li>Hire me</li>
+    <hr>
+    <li>Save player progress</li>
+    <hr>
+    <li>About us</li>
+    </ul>
+</div>
+</div>
+
+    
+<div class="subContainer1">
+    <div><img src="./images/RPSHeader.png" class='heading'> </div>
+</div>
+
+<div class="subContainer2">
+    
+    <div class="playerContainer">
+        <img src=" "
+        id="playerIcon">
+        
+        <img src="./images/empty_circle.png" class="player">
+    </div>
+    
+    <div class="playerContainer">
+        <img src=" " id="playerIcon2">
+        <img src="./images/empty_circle.png" class="player"> 
+    </div>
+    
+</div>
+
+
+<div class="subContainer3">
+    <p class="tries">You Have 4 Tries</p>
+    <div class="rock"><img src="./images/rock.png" class="rock" id="rock"></div>
+
+    <div class="paper"><img src="./images/paper.png" class="paper" id="paper"></div>
+
+    <div class="scissors"><img src="./images/scissors.png" class="scissors" id="scissors"></div>
+</div>
+
+<div class="subContainer4">
+    
+    <img src="" alt="you win icon" id='pop_upCrown'>
+     <p class="liveScore"><span id="score1"> PLAYER </span> &nbsp; &nbsp; &nbsp; &nbsp; <span id="score2">COMPUTER</span> </p>
+    
+    <div>
+       
+        <img src="./images/scoreboard.png" class="scoreboard"> </div>
+    </div>
+
+</div>
+
+
+<style> 
+body{ 
+    background-image:url("./images/background.png");
+    
+    background-size: 100vw 97%;
+    background-repeat: no-repeat;
+  
+    
+}
+
+.nav_bar{
+    position: relative;
+}
+
+.menu{ 
+    border-radius:40%;
+    border: 0px;
+    position: absolute;
+    opacity: 0.4;
+    top: 20px;
+    left: 20px;
+}
+
+#sideTab{
+    background-color: grey;
+    position: absolute;
+    top: 35px;
+    left: 20px;
+    display: none;
+}
+
+.container1{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+    }
+
+.subContainer1{
+    height: 15%;
+    display: flex;
+    justify-content: center;
+}
+.subContainer2{
+    height: 30%;
+    display: flex;
+    justify-content: space-evenly;
+  
+}
+.subContainer3{
+    height:20%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.subContainer4{
+    position: relative;
+    height: 35%;
+    display: flex;
+    justify-content: center;
+}
+
+.heading{
+    height:400%;
+    }
+.playerContainer{
+    position: relative;
+    z-index: -1;
+}
+.player{
+    height:60%;
+    }
+#playerIcon{
+    height:40%;
+    position: absolute;
+    left:15px;
+    top: 15px;
+}
+
+#playerIcon2{
+    height: 40%;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+#pop_upCrown{
+    position: absolute;
+    height: 20%;
+    left: 55;
+}
+#score1, #score2{
+    font-weight: 500;
+    font-size: 10px;
+}
+
+.tries{
+    color:white;
+    font-size: 2em;
+    position:absolute;
+    top:290px;
+    opacity:0.5;
+}
+    
+    
+.rock, .paper, .scissors{
+    height:80%;
+}
+
+.scoreboard{
+    height: 100%;
+}
+
+.liveScore{
+    color: white;
+    position: absolute;
+    top: 10px;
+}
+
+.popUp{
+    background-color: grey;
+    height: 50px;
+    width:50%;
+    margin-left:20%;
+    border-radius:10px ;
+    position: absolute;
+    top:40%;
+    padding:5%;
+    display: none;
+}
+#popUpText{
+    color:black;
+    font-weight:500 ;
+    text-align: center;
+}
+
+#tryAgain{
+    margin:0px;
+    padding: 0px;
+    position: relative;
+    left:40%;
+}
+</style>
+
+<script>
+
+const rock =document.querySelector(".rock");
+const paper =document.querySelector(".paper");
+const scissors=document.querySelector(".scissors");
+const menu= document.querySelector(".menu");
+const tryAgain= document.querySelector('.tryAgain');
+const sideTab= document.getElementById("sideTab");
+const tries=document.querySelector('.tries');
+const rockie=document.getElementById('rock');
+const paperie=document.getElementById('paper');
+const scissorsie=document.getElementById('scissors');
+const popUpText= document.querySelector('.popUpText');
+const popUp = document.getElementById('popUp');
+
+
+let computerMove;
+let playerMove;
+let score;
+let manipulateSideTab;
+let playerScore= 0;
+let computerScore= 0;
+let disPlay='none';
+let playerTries=0;
+const rockSound= new Audio('./audio/rock.mp3');
+const paperSound= new Audio('./audio/paper.mp3');
+const scissorsSound= new Audio('./audio/scissors.mp3');
+
+function generateComputerMove(){
+    let randomNumber= Math.random();
+    if (randomNumber<=0.35){
+        computerMove= "ROCK";
+        console.log('computer played rock')
+    }
+    else if (randomNumber>0.35 && randomNumber<=0.7){
+        computerMove= "PAPER";
+        console.log('computer played paper')
+
+    }
+    else if (randomNumber>0.7 && randomNumber <= 1.0){
+        computerMove= "SCISSORS";
+        console.log('computer played scissors')
+
+    }}
+    
+    
+function computerIcon (){
+
+if (computerMove==='ROCK'){
+     document.getElementById('playerIcon2').src='./images/scissorsHand.gif';
+     
+    sisiHnd=()=>{ document.getElementById('playerIcon2').src='./images/rockHand.png';}
+    setTimeout(sisiHnd,1800)
+}
+else if (computerMove==='SCISSORS'){ document.getElementById('playerIcon2').src='./images/scissorsHand.gif';
+
+    sisiHnd=()=>{document.getElementById('playerIcon2').src='./images/scissorsHand.png';}
+     
+    setTimeout(sisiHnd,1800)
+    
+}
+else if  (computerMove==='PAPER'){
+    document.getElementById('playerIcon2').src='./images/scissorsHand.gif';
+    
+    sisiHnd=()=>{ document.getElementById('playerIcon2').src='./images/paperHand.png';}
+         setTimeout(sisiHnd,1800)
+}
+    
+}
+
+
+
+function scoreGenerator(){
+    if (playerMove === computerMove){
+        score= 'Tie';
+    }
+    else if (playerMove === 'ROCK'){
+        if (computerMove==='SCISSORS'){score= 'Win';}
+        if (computerMove==='PAPER'){
+            score='Lose';}}
+            
+     else if (playerMove === 'PAPER'){
+        if (computerMove==='SCISSORS'){score= 'Lose';}
+        if (computerMove==='ROCK'){
+            score='Win';}}
+      
+     else if (playerMove === 'SCISSORS'){
+        if (computerMove==='PAPER'){score= 'Win';}
+        if (computerMove==='ROCK'){
+            score='Lose';}}  
+            console.log(score);}
+            
+function realTimeScore(){
+    if (score==='Win'){
+        playerScore += 1;
+    
+        document.getElementById('pop_upCrown').src='./images/crown.gif';
+    }
+    else if (score === 'Lose'){
+        computerScore += 1;
+    }
+        
+        console.log(
+            `player score:${playerScore}
+            computer score: ${computerScore}`)
+   const scoreDisplay1= document.querySelector('#score1');
+   scoreDisplay1.innerText=`player: ${playerScore}`;
+  
+   const scoreDisplay2= document.querySelector('#score2');
+   scoreDisplay2.innerText=`computer:  ${computerScore}`;
+   
+   if (playerScore>computerScore){
+       popUpText.innerText='YOU WIN!'
+   }
+   else if (computerScore===playerScore){
+         popUpText.innerText="IT's a Tie!"}
+   else if (computerScore>playerScore){
+         popUpText.innerText='YOU LOSE!'
+   }
+}
+
+
+function changeButtonColor (){
+    if (playerMove==='ROCK'){
+        oldClr=()=>{document.getElementById('rock').src='./images/rock.png';}
+     setTimeout(oldClr,500);
+     
+       newClr=()=>{  document.getElementById('rock').src='./images/rock2.png';}
+      newClr();
+    }
+      
+    else if (playerMove==='PAPER'){
+        oldClr=()=>{document.getElementById('paper').src='./images/paper.png';}
+     setTimeout(oldClr,500);
+      newClr=()=>{  document.getElementById('paper').src='./images/paper2.png';}
+      newClr();}
+      
+      else if (playerMove==='SCISSORS'){
+        oldClr=()=>{document.getElementById('scissors').src='./images/scissors.png';}
+     setTimeout(oldClr,500);
+      newClr=()=>{  document.getElementById('scissors').src='./images/scissors2.png';}
+      newClr();}
+}
+            
+            
+
+rock.addEventListener('click', clickRock=()=>{
+        playerMove="ROCK"
+        playerTries ++
+        changeButtonColor();
+        console.log('rock had been clicked')
+        generateComputerMove();
+        scoreGenerator();
+        computerIcon();
+        document.getElementById('playerIcon').src='./images/playerRockHand.png';
+        realTimeScore();
+        rockSound.play()
+        playerTryCountDown();
+       
+} );
+
+
+paper.addEventListener('click', clickPaper=()=>{
+        playerMove="PAPER";
+        playerTries ++
+         changeButtonColor();
+        console.log('paper had been clicked')
+        generateComputerMove();
+        scoreGenerator();
+        console.log(playerMove);
+        computerIcon();
+        document.getElementById('playerIcon').src="./images/playerPaperHand.png";
+        realTimeScore();
+        paperSound.play();
+        playerTryCountDown();
+} );
+
+scissors.addEventListener('click', clickScissors=()=>{
+        playerMove="SCISSORS"
+        playerTries ++
+         changeButtonColor();
+        console.log('scissors had been clicked')
+        generateComputerMove();
+        scoreGenerator();
+        computerIcon();
+        document.getElementById('playerIcon').src='./images/playerScissorsHand.png';
+        realTimeScore();
+        scissorsSound.play();
+        playerTryCountDown();
+} );
+
+console.log(playerMove);
+
+
+menu.addEventListener('click', manipulateSideTab=()=>{
+    if (disPlay==='not_none'){
+       sideTab.style.display='none';
+       disPlay='none';
+    }
+    else if (disPlay==='none'){
+        sideTab.style.display='block';
+        disPlay='not_none'; }
+    console.log(disPlay);
+    });
+
+function playerTryCountDown(){    
+ if (playerTries===1){
+    tries.innerText='4';}
+else if (playerTries===2){
+    tries.innerText='3';}
+else if (playerTries===3){
+    tries.innerText='2';}
+if (playerTries===4){
+    tries.innerText='1'
+    rockie.style.display='none';
+    paperie.style.display='none';
+    scissorsie.style.display='none';
+    timeOut=()=>{
+        tries.innerText='You are out of Tries';}
+    timeOut2=()=>{
+        popUp.style.display='block';
+    }
+    setTimeout(timeOut,800);
+    setTimeout(timeOut2,1500);
+    ;}}
+    
+
+console.log(playerTries);
+
+tryAgain.addEventListener('click',reTry=()=>{
+    computerScore=0;
+    playerScore=0;
+    playerTries=0;
+    rockie.style.display='block';
+    paperie.style.display='block';
+    scissorsie.style.display='block';
+    popUp.style.display='none';
+    
+}
+
+);
+
+
+
+
+</script>
+    
+</body>
